@@ -46,7 +46,7 @@ function executeCommand(command) {
         window.location.href = 'Accueil.html'; 
         break;
       default:
-        output = 'Commande inconnue. Essayez la commande "cd" suivi de la page où vous voulez vous rendre.';
+        output = 'Commande inconnue. Essayez la commande "cd" suivi de la page où vous voulez vous rendre. ( accueil/projets/contacter/formations)';
         break;
     }
   }
