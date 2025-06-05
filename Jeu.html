@@ -1,0 +1,163 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+  <meta charset="UTF-8">
+  <title>Jeu Labyrinthe</title>
+  <style>
+    body {
+      margin: 0;
+      background: #111;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      height: 100vh;
+    }
+
+    canvas {
+      background-color: #fff;
+      border: 2px solid #000;
+    }
+
+    #win-message {
+      position: absolute;
+      top: 30px;
+      color: lime;
+      font-size: 28px;
+      font-family: sans-serif;
+    }
+  </style>
+</head>
+<body>
+  <div id="win-message"></div>
+  <canvas id="gameCanvas" width="600" height="600"></canvas>
+
+  <script>
+    const canvas = document.getElementById('gameCanvas');
+    const ctx = canvas.getContext('2d');
+    const tileSize = 30;
+
+    // Labyrinthe (0 = mur, 1 = chemin)
+   const maze = [
+  [1,1,1,0,1,1,1,0,1,1,1,0,0,1,1,1,1,0,0,0],
+  [0,0,0,1,1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0],
+  [0,0,0,1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0],
+  [0,1,0,1,1,1,1,1,1,1,0,0,0,0,0,0,0,0,0,0],
+  [0,1,0,0,0,0,0,0,0,1,0,0,0,0,0,0,0,0,0,0],
+  [0,1,1,1,1,1,1,1,0,1,0,0,0,0,0,0,0,0,0,0],
+  [0,0,0,0,0,0,0,1,0,1,1,1,1,1,1,1,0,0,0,0],
+  [0,0,0,0,0,0,0,1,0,0,0,0,0,0,0,1,0,0,0,0],
+  [0,0,0,0,0,0,0,1,1,1,1,1,1,1,0,1,0,0,0,0],
+  [0,0,0,0,0,0,0,0,0,0,0,0,0,1,0,1,0,0,0,0],
+  [0,0,0,0,0,0,0,0,0,0,0,0,0,1,0,1,1,1,1,0],
+  [0,0,0,0,0,0,0,0,0,0,0,0,0,1,0,0,0,0,1,0],
+  [0,0,0,0,0,0,0,0,0,0,0,0,0,1,1,1,1,0,1,0],
+  [0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1,0,1,0],
+  [0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1,0,1,0],
+  [0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1,0,1,0],
+  [0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1,0,1,0],
+  [0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1,0,1,0],
+  [0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1,0,1,0],
+  [0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1,1],
+];
+
+    const player = {
+      x: 0,
+      y: 0,
+      size: tileSize,
+      color: 'red'
+    };
+
+    const goal = {
+      x: 19,
+      y: 19,
+      color: 'gold'
+    };
+
+    function drawMaze() {
+      for (let y = 0; y < maze.length; y++) {
+        for (let x = 0; x < maze[y].length; x++) {
+          ctx.fillStyle = maze[y][x] === 1 ? '#fff' : '#000';
+          ctx.fillRect(x * tileSize, y * tileSize, tileSize, tileSize);
+        }
+      }
+
+      // Objectif
+      ctx.fillStyle = goal.color;
+      ctx.fillRect(goal.x * tileSize, goal.y * tileSize, tileSize, tileSize);
+    }
+
+    function drawPlayer() {
+      ctx.fillStyle = player.color;
+      ctx.fillRect(player.x * tileSize, player.y * tileSize, player.size, player.size);
+    }
+
+    function draw() {
+      ctx.clearRect(0, 0, canvas.width, canvas.height);
+      drawMaze();
+      drawPlayer();
+    }
+
+    function movePlayer(dx, dy) {
+      const newX = player.x + dx;
+      const newY = player.y + dy;
+
+      if (
+        newY >= 0 &&
+        newY < maze.length &&
+        newX >= 0 &&
+        newX < maze[0].length &&
+        maze[newY][newX] === 1
+      ) {
+        player.x = newX;
+        player.y = newY;
+        draw();
+        checkWin();
+      }
+    }
+
+    function checkWin() {
+      if (player.x === goal.x && player.y === goal.y) {
+        document.getElementById('win-message').textContent = "🎉 Tu as gagné !";
+        document.removeEventListener('keydown', handleKey);
+      }
+    }
+
+    function handleKey(e) {
+      switch (e.key) {
+        case 'ArrowUp': movePlayer(0, -1); break;
+        case 'ArrowDown': movePlayer(0, 1); break;
+        case 'ArrowLeft': movePlayer(-1, 0); break;
+        case 'ArrowRight': movePlayer(1, 0); break;
+      }
+    }
+
+    document.addEventListener('keydown', handleKey);
+    draw();
+  </script>
+</body>
+</html>
+
+
+
+[1,1,1,1,1,1,1,1,0,1,1,1,1,1,0,1,1,1,0,1],
+[1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1]
+11111111111111011111
+11111111111111111111
+11111110111011111111
+11111111011111111111
+11111111111111111111
+11111111111111111111
+11111111111111111111
+11111111111111111111
+11111111111111111111
+11111111111111111111
+11111111111111101111
+11111111111111111111
+11111111111111111111
+11111111111111111111
+11111111111111111111
+11111111111111111111
+11111111111111111111
+11111111111111111111
+
+
