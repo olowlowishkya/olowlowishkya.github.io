@@ -45,9 +45,6 @@ function executeCommand(command) {
       case 'cd accueil':
         window.location.href = 'Accueil.html'; 
         break;
-		case 'cd jeu':
-		window.location.href = 'Jeu.html';
-		break;
       default:
         output = 'Commande inconnue. Essayez la commande "cd" suivi de la page où vous voulez vous rendre.';
         break;
